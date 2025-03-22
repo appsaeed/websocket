@@ -1,0 +1,30 @@
+<html>
+    <head>
+        <style>
+            input, button { padding: 10px; }
+        </style>
+    </head>
+    <body>
+        <textarea 
+            oninput="transmitMessage(this.value)"
+            rows="6" cols="50" 
+            placeholder="Type your message here..."
+        ></textarea>
+        <div>
+            <p>Message:</p>
+            <pre id="console"></pre>
+        </div>
+        <script>
+            // Create a new WebSocket.
+            var ws  = new WebSocket('ws://localhost:8080/media-stream');
+            ws.onopen = () => console.log('Connected');
+            ws.onclose = () => console.log('Disconnected');
+            ws.onerror = (err) => console.error('Error: ', err);
+            ws.onmessage = (e) => document.getElementById('console').textContent = e.data;
+
+            function transmitMessage(message) {
+                ws.send( message );
+            }
+        </script>
+    </body>
+</html>
